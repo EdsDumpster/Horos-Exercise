@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">Horos-Exercise</string>
+
+    <string name="signname_aquarius">Aquarius</string>
+    <string name="signname_aries">Aries</string>
+    <string name="signname_cancer">Cancer</string>
+    <string name="signname_capricorn">Capricorn</string>
+    <string name="signname_gemini">Gemini</string>
+    <string name="signname_leo">Leo</string>
+    <string name="signname_libra">Libra</string>
+    <string name="signname_pisces">Pisces</string>
+    <string name="signname_sagittarius">Sagittarius</string>
+    <string name="signname_scorpio">Scorpio</string>
+    <string name="signname_taurus">Taurus</string>
+    <string name="signname_virgo">Virgo</string>
+
+    <string name="signdate_aquarius">January 20 to February 18</string>
+    <string name="signdate_pisces">February 19 to March 20</string>
+    <string name="signdate_aries">March 21 to April 19</string>
+    <string name="signdate_taurus">April 20 to May 20</string>
+    <string name="signdate_gemini">May 21 to June 20</string>
+    <string name="signdate_cancer">June 21 to July 22</string>
+    <string name="signdate_leo">July 23 to August 22</string>
+    <string name="signdate_virgo">August 23 to September 22</string>
+    <string name="signdate_libra">September 23 to October 22</string>
+    <string name="signdate_scorpio">October 23 to November 21</string>
+    <string name="signdate_sagittarius">November 22 to December 21</string>
+    <string name="signdate_capricorn">December 22 to January 19</string>
+
 </resources>
