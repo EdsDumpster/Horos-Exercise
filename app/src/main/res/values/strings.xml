@@ -27,4 +27,6 @@
     <string name="signdate_sagittarius">November 22 to December 21</string>
     <string name="signdate_capricorn">December 22 to January 19</string>
 
+    <string name="menu_search">Search</string>
+
 </resources>
