@@ -1,5 +1,6 @@
 package com.example.horos_exercise
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.enableEdgeToEdge
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        adapter = ZodiacAdapter(horoscopeList)
+        adapter = ZodiacAdapter(horoscopeList, ::onItemClickListener)
 
         initRecyclerView()
     }
@@ -62,4 +63,14 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    fun onItemClickListener(position: Int) {
+        val horoscope = horoscopeList[position]
+        goToDetail(horoscope)
+    }
+
+    fun goToDetail(horoscope: ZodiacList) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("HOROSCOPE_ID", horoscope.id)
+        startActivity(intent)
+    }
 }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.horos_exercise.R
 import com.example.horos_exercise.ZodiacList
 
-class ZodiacAdapter(var items: List<ZodiacList>): RecyclerView.Adapter<ZodiacViewHolder>() {
+class ZodiacAdapter(var items: List<ZodiacList>, val onClickListener: (Int) -> Unit): RecyclerView.Adapter<ZodiacViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -22,6 +22,9 @@ class ZodiacAdapter(var items: List<ZodiacList>): RecyclerView.Adapter<ZodiacVie
     ) {
         val item = items[position]
         holder.render(item)
+        holder.itemView.setOnClickListener {
+            onClickListener(position)
+        }
     }
 
     override fun getItemCount(): Int {

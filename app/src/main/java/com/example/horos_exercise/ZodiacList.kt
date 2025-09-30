@@ -26,5 +26,8 @@ data class ZodiacList(
 
                 )
         }
+        fun getById(id: String) : ZodiacList {
+            return getAll().first { it.id == id }
+        }
     }
 }
