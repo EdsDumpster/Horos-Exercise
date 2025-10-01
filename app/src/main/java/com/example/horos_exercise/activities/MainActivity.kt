@@ -1,4 +1,4 @@
-package com.example.horos_exercise
+package com.example.horos_exercise.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,12 +10,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.horos_exercise.R
+import com.example.horos_exercise.ZodiacList
 import com.example.horos_exercise.adapter.ZodiacAdapter
-
 
 class MainActivity : AppCompatActivity() {
 
-    var horoscopeList: List<ZodiacList> = ZodiacList.getAll()
+    var horoscopeList: List<ZodiacList> = ZodiacList.Companion.getAll()
     lateinit var adapter: ZodiacAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +33,16 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        adapter.updateItems(horoscopeList)
+    }
+
     fun initRecyclerView(){
         val recyclerView = findViewById<RecyclerView>(R.id.recycleHoros)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-
 
     }
 
@@ -50,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                horoscopeList = ZodiacList.getAll().filter {
+                horoscopeList = ZodiacList.Companion.getAll().filter {
                     getString(it.name).contains(newText, true)
                             || getString(it.dates).contains(newText, true)
                 }
