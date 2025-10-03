@@ -1,6 +1,7 @@
 package com.example.horos_exercise.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -12,17 +13,34 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.horos_exercise.R
 import com.example.horos_exercise.SessionManager
 import com.example.horos_exercise.ZodiacList
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.internal.NavigationMenu
+import com.google.android.material.progressindicator.LinearProgressIndicator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class DetailActivity : AppCompatActivity() {
 
     lateinit var nameView: TextView
     lateinit var dateView: TextView
     lateinit var iconView: ImageView
-
     lateinit var horoscope: ZodiacList
-
     lateinit var session: SessionManager
     lateinit var favoriteMenu: MenuItem
+
+    lateinit var progressionIndicator: LinearProgressIndicator
+
+    lateinit var luckView: TextView
+
+    lateinit var navigationBottom: BottomNavigationView
 
     var isFavorite = false
 
@@ -56,6 +74,29 @@ class DetailActivity : AppCompatActivity() {
         nameView.setText(horoscope.name)
         dateView.setText(horoscope.dates)
         iconView.setImageResource(horoscope.icon)
+
+        progressionIndicator = findViewById(R.id.progressIndicator)
+        luckView = findViewById(R.id.luckView)
+        navigationBottom = findViewById(R.id.ivNavigation)
+        navigationBottom.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_daily -> {
+                    getLuck("daily")
+                    true
+                }
+                R.id.action_weekly -> {
+                    getLuck("weekly")
+                    true
+                }
+                R.id.action_monthly -> {
+                    getLuck("monthly")
+                    true
+                }
+                else -> false
+            }
+        }
+
+        getLuck()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,5 +137,55 @@ class DetailActivity : AppCompatActivity() {
         } else {
             favoriteMenu.setIcon(R.drawable.favorite_false_icon)
         }
+    }
+
+    fun getLuck(period: String = "daily") {
+        progressionIndicator.show()
+        luckView.text = "Consulting the stars..."
+        CoroutineScope(Dispatchers.IO).launch {
+            val url = URL("https://horoscope-app-api.vercel.app/api/v1/get-horoscope/$period?sign=${horoscope.id}&day=TODAY")
+            // HTTP Connexion
+            val connection = url.openConnection() as HttpsURLConnection
+            // Method
+            connection.setRequestMethod("GET")
+
+            try {
+                // Response code
+                val responseCode = connection.getResponseCode()
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Read the response
+                    val response = readStream(connection.inputStream)
+
+                    val jsonResponse = JSONObject(response)
+                    val result = jsonResponse.getJSONObject("data").getString("horoscope_data")
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        luckView.text = result
+                        progressionIndicator.hide()
+                    }
+
+                    Log.i("API", result)
+                } else {
+                    Log.e("API", "Server response: $responseCode")
+                }
+            } catch (e: Exception) {
+                Log.e("API", "Error", e)
+            } finally {
+                connection.disconnect()
+            }
+        }
+    }
+
+    fun readStream (input: InputStream) : String {
+        val reader = BufferedReader(InputStreamReader(input))
+        val response = StringBuffer()
+        var inputLine: String? = null
+
+        while ((reader.readLine().also { inputLine = it }) != null) {
+            response.append(inputLine)
+        }
+        reader.close()
+        return response.toString()
     }
 }

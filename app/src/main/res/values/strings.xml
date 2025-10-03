@@ -28,5 +28,8 @@
     <string name="signdate_capricorn">December 22 to January 19</string>
 
     <string name="menu_search">Search</string>
+    <string name="daily_navigation_menu">Daily</string>
+    <string name="weekly_navigation_menu">Weekly</string>
+    <string name="monthly_navigation_menu">Monthly</string>
 
 </resources>
